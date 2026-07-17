@@ -1,0 +1,7 @@
+CompileFlags:
+  # Where CMake writes compile_commands.json
+  CompilationDatabase: build
+
+Diagnostics:
+  UnusedIncludes: Strict
+  MissingIncludes: Strict
