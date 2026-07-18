@@ -3,5 +3,5 @@ CompileFlags:
   CompilationDatabase: build
 
 Diagnostics:
-  UnusedIncludes: Strict
-  MissingIncludes: Strict
+  UnusedIncludes: None
+  MissingIncludes: None
