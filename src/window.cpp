@@ -1,10 +1,12 @@
 #include "window.h"
+#include "iostream"
 
 namespace fivelabsengine {
 Window::Window(int w, int h, std::string name)
     : width{w}, height{h}, windowName{name} {
   initWindow();
 }
+
 Window::~Window() {
   glfwDestroyWindow(window);
   glfwTerminate();
@@ -23,5 +25,10 @@ void Window::initWindow() {
       glfwCreateWindow(width, height, windowName.c_str(), nullptr, nullptr);
 
   glfwMakeContextCurrent(window);
+
+  if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+    std::cerr << "Failed to initialize GLAD\n";
+    return;
+  }
 }
 } // namespace fivelabsengine
