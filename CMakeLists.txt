@@ -15,16 +15,27 @@ find_package(OpenGL REQUIRED)
 add_executable(fivelabsengine
   src/main.cpp
   src/window.cpp
+  # src/debug-log.cpp
+  src/shader.cpp
   src/app.cpp
   src/glad.c
   # headers listed so they show up in IDEs / get a compile command context
   src/config.h
   src/window.h
+  # src/debug-log.h
   src/app.h
+  src/shader.h
 )
 
 target_include_directories(fivelabsengine PRIVATE dependencies src)
 target_link_libraries(fivelabsengine OpenGL::GL)
 target_link_libraries(fivelabsengine glfw)
+
+add_custom_command(TARGET fivelabsengine POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_directory
+          ${CMAKE_SOURCE_DIR}/src/shaders
+          $<TARGET_FILE_DIR:fivelabsengine>/shaders)
+
+
 
 
