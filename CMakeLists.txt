@@ -35,7 +35,3 @@ add_custom_command(TARGET fivelabsengine POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy_directory
           ${CMAKE_SOURCE_DIR}/src/shaders
           $<TARGET_FILE_DIR:fivelabsengine>/shaders)
-
-
-
-

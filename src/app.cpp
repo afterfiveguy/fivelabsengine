@@ -13,7 +13,8 @@ void framebufferSizeCallback(GLFWwindow *window, int width, int height) {
 
 void App::run() {
   Shader ourShader("./src/shaders/simple.vs", "./src/shaders/simple.fs");
-
+  
+  float stepOffset = 0.2f;
   float firstTriangleVertices[] = {
       // positions         // colors
       0.5f,  -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom right
@@ -44,7 +45,8 @@ void App::run() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     ourShader.use();
-
+    ourShader.setFloat("xOffset", stepOffset);
+    
     float time = glfwGetTime();
     float greenValue = sin((time) / 2.0f) + 0.5f;
 
