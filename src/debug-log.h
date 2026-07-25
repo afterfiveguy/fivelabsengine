@@ -5,15 +5,17 @@
 #include <string>
 #include <vector>
 
-namespace engineDebugger {
+namespace engineDebugger
+{
 
-class DebugConsole {
-public:
-  void log(const std::string &message);
-  void render(SDL_Renderer *renderer, TTF_Font *font) const;
+  class DebugConsole
+  {
+  public:
+    void log(const std::string &message);
+    void render(SDL_Renderer *renderer, TTF_Font *font) const;
 
-private:
-  std::vector<std::string> lines;
-  size_t maxLines = 12;
-};
+  private:
+    std::vector<std::string> lines;
+    size_t maxLines = 12;
+  };
 } // namespace engineDebugger
