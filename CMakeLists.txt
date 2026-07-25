@@ -25,6 +25,8 @@ add_executable(fivelabsengine
   # src/debug-log.h
   src/app.h
   src/shader.h
+  src/stb_image.h
+  src/stb_image.cpp
 )
 
 target_include_directories(fivelabsengine PRIVATE dependencies src)
@@ -35,3 +37,8 @@ add_custom_command(TARGET fivelabsengine POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy_directory
           ${CMAKE_SOURCE_DIR}/src/shaders
           $<TARGET_FILE_DIR:fivelabsengine>/shaders)
+
+add_custom_command(TARGET fivelabsengine POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_directory
+          ${CMAKE_SOURCE_DIR}/src/resources
+          $<TARGET_FILE_DIR:fivelabsengine>/resources)
