@@ -11,6 +11,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(glfw3 3.3 REQUIRED)
 find_package(OpenGL REQUIRED)
+find_package(glm CONFIG REQUIRED)
 
 add_executable(fivelabsengine
   src/main.cpp
@@ -32,13 +33,4 @@ add_executable(fivelabsengine
 target_include_directories(fivelabsengine PRIVATE dependencies src)
 target_link_libraries(fivelabsengine OpenGL::GL)
 target_link_libraries(fivelabsengine glfw)
-
-add_custom_command(TARGET fivelabsengine POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy_directory
-          ${CMAKE_SOURCE_DIR}/src/shaders
-          $<TARGET_FILE_DIR:fivelabsengine>/shaders)
-
-add_custom_command(TARGET fivelabsengine POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy_directory
-          ${CMAKE_SOURCE_DIR}/src/resources
-          $<TARGET_FILE_DIR:fivelabsengine>/resources)
+target_link_libraries(fivelabsengine glm::glm)

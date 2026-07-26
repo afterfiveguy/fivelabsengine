@@ -1,6 +1,7 @@
 #include "config.h"
 
-int main() {
+int main()
+{
   std::cout << "Welcome, fivelabsengine." << "\n";
 
   fivelabsengine::App app{};
