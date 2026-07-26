@@ -11,7 +11,7 @@ namespace fivelabsengine
   namespace
   {
     float mixValue = 0.1f;
-
+    float fov = 70.0f;
     void framebufferSizeCallback(GLFWwindow *window, int width, int height)
     {
       glViewport(0, 0, width, height);
@@ -32,17 +32,17 @@ namespace fivelabsengine
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
 
       int width, height, nrChannels;
-
+      stbi_set_flip_vertically_on_load(flipVertically);
       unsigned char *data = stbi_load(path,
                                       &width, &height, &nrChannels, 0);
-
-      stbi_set_flip_vertically_on_load(flipVertically);
-      GLenum format = (nrChannels == 4) ? GL_RGBA : GL_RGB;
       if (!data)
       {
         std::cout << "Failed to load texture" << std::endl;
         return id;
       }
+
+      GLenum format = (nrChannels == 4) ? GL_RGBA : GL_RGB;
+
       std::cout << "Loaded texture container: " << width << "x" << height << "\n";
       glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
       glGenerateMipmap(GL_TEXTURE_2D);
@@ -54,6 +54,21 @@ namespace fivelabsengine
     {
       if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+
+      if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+      {
+        fov -= 0.1f;
+        if (fov <= 1.0f)
+
+          fov = 1.0f;
+      }
+      if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+      {
+        fov += 0.1f;
+        if (fov >= 90.0f)
+
+          fov = 90.0f;
+      }
 
       if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
       {
@@ -77,12 +92,47 @@ namespace fivelabsengine
     Shader ourShader("./src/shaders/simple.vs", "./src/shaders/simple.fs");
 
     float vertices[] = {
-        // positions          // colors           // texture coords
-        0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,   // top right
-        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,  // bottom right
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-        -0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f   // top left
-    };
+        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+        0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
+        0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+        0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+        0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+        0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
+        0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
+        -0.5f, 0.5f, 0.5f, 0.0f, 1.0f,
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+
+        -0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+        -0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+        -0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+
+        0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+        0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+        0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+        0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+        0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+
+        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
+        0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+        0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
+        0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+        0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+        0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+        -0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f};
 
     unsigned int indices[] = {
         0, 1, 3, // first triangle
@@ -103,15 +153,11 @@ namespace fivelabsengine
                  GL_STATIC_DRAW);
 
     // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
-    // color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float),
-                          (void *)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
     // texture coord attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float),
-                          (void *)(6 * sizeof(float)));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
+                          (void *)(3 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
     glViewport(0, 0, WIDTH, HEIGHT);
@@ -121,7 +167,7 @@ namespace fivelabsengine
 
     // Loading texture
 
-    const unsigned int texture1 = loadTexture("./src/resources/textures/container.jpg", false, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    const unsigned int texture1 = loadTexture("./src/resources/textures/container.jpg", true, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_NEAREST, GL_NEAREST);
 
     const unsigned int texture2 = loadTexture("./src/resources/textures/awesomeface.png", true, GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
 
@@ -130,37 +176,51 @@ namespace fivelabsengine
     ourShader.setInt("texture1", 0);
     ourShader.setInt("texture2", 1);
 
+    glm::vec3 cubePositions[] = {
+        glm::vec3(2.0f, 5.0f, -15.0f),
+        glm::vec3(-1.5f, -2.2f, -2.5f),
+        glm::vec3(-3.8f, -2.0f, -12.3f),
+        glm::vec3(2.4f, -0.4f, -3.5f),
+        glm::vec3(-1.7f, 3.0f, -7.5f),
+        glm::vec3(1.3f, -2.0f, -2.5f),
+        glm::vec3(1.5f, 2.0f, -2.5f),
+        glm::vec3(1.5f, 0.2f, -1.5f),
+        glm::vec3(-1.3f, 1.0f, -1.5f)};
+
     while (!window.shouldClose())
     {
       processInput(window.getGLFWwindow());
 
       ourShader.setFloat("mixValue", mixValue);
-
+      glEnable(GL_DEPTH_TEST);
       glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-      glClear(GL_COLOR_BUFFER_BIT);
-
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
       glActiveTexture(GL_TEXTURE0);
       glBindTexture(GL_TEXTURE_2D, texture1);
       glActiveTexture(GL_TEXTURE1);
       glBindTexture(GL_TEXTURE_2D, texture2);
 
+      glm::mat4 view = glm::mat4(1.0f);
+      view = glm::translate(view, glm::vec3(0.0f, 0.0f, -2.0f));
+      glm::mat4 projection = glm::perspective(glm::radians(fov), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
+      unsigned int projectionLoc = glGetUniformLocation(ourShader.ID, "projection");
+      glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+      unsigned int viewLoc = glGetUniformLocation(ourShader.ID, "view");
+      glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+
       glBindVertexArray(VAO);
-      glm::mat4 transform = glm::mat4(1.0f);
-      transform = glm::translate(transform, glm::vec3(0.5f, -0.5f, 0.0f));
-      transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-
-      unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
-      glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
-
-      glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-      transform = glm::mat4(1.0f);
-      transform = glm::translate(transform, glm::vec3(-0.5f, 0.5f, 0.0f));
-      float scaleAmount = static_cast<float>(sin(glfwGetTime()));
-      transform = glm::scale(transform, glm::vec3(scaleAmount, scaleAmount, scaleAmount));
-      glUniformMatrix4fv(transformLoc, 1, GL_FALSE, &transform[0][0]); // this time take the matrix value array's first element as its memory pointer value
-
-      glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+      for (unsigned int i = 0; i < 10; i++)
+      {
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, cubePositions[i]);
+        float angle = 20.0f * i;
+        if (i % 3 == 0) // every 3rd iteration (including the first) we set the angle using GLFW's time function.
+          angle = glfwGetTime() * 25.0f;
+        model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+        unsigned int modelLoc = glGetUniformLocation(ourShader.ID, "model");
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+      }
 
       window.swapBuffers();
       glfwPollEvents();

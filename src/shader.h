@@ -16,6 +16,10 @@ namespace fivelabsengine
     unsigned int ID;
 
     Shader(const char *vertexPath, const char *fragmentPath);
+    ~Shader() { glDeleteProgram(ID); }
+    Shader(const Shader &) = delete;
+    Shader &operator=(const Shader &) = delete;
+    Shader(Shader &&o) noexcept : ID(o.ID) { o.ID = 0; }
 
     void use();
 
