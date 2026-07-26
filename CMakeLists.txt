@@ -24,6 +24,7 @@ add_executable(fivelabsengine
   src/shader.cpp
   src/app.cpp
   src/glad.c
+  src/camera.cpp
   # headers listed so they show up in IDEs / get a compile command context
   src/config.h
   src/window.h
@@ -32,6 +33,9 @@ add_executable(fivelabsengine
   src/shader.h
   src/stb_image.h
   src/stb_image.cpp
+  src/cube.cpp
+  src/cube.h
+  src/camera.h
 )
 
 target_include_directories(fivelabsengine PRIVATE dependencies src)
