@@ -23,6 +23,7 @@ add_executable(fivelabsengine
   # src/debug-log.cpp
   src/shader.cpp
   src/app.cpp
+  src/cube.cpp
   src/glad.c
   # headers listed so they show up in IDEs / get a compile command context
   src/config.h
@@ -30,6 +31,7 @@ add_executable(fivelabsengine
   # src/debug-log.h
   src/app.h
   src/shader.h
+  src/cube.h
   src/stb_image.h
   src/stb_image.cpp
 )
