@@ -31,6 +31,8 @@ namespace fivelabsengine
         if (direction == CameraMovement::Right)
             cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * velocity;
 
+        cameraPos.y = 0.0f;
+
         updateView();
     }
     void Camera::onMouseMove(double xposIn, double yposIn)
