@@ -12,6 +12,10 @@ namespace fivelabsengine
     void framebufferSizeCallback(GLFWwindow *window, int width, int height)
     {
       glViewport(0, 0, width, height);
+
+      auto *camera = static_cast<Camera *>(glfwGetWindowUserPointer(window));
+      if (camera && height > 0)
+        camera->setAspect((float)width / (float)height);
     }
     void mouseCallback(GLFWwindow *window, double xpos, double ypos)
     {
@@ -41,21 +45,20 @@ namespace fivelabsengine
     Shader ourShader("./src/shaders/simple.vs", "./src/shaders/simple.fs");
 
     glViewport(0, 0, WIDTH, HEIGHT);
-    glfwSetFramebufferSizeCallback(window.getGLFWwindow(),
-                                   framebufferSizeCallback);
     glClearColor(0.25f, 0.5f, 0.75f, 1.0f);
 
     ourShader.use();
-
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f),
-                                            (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
-    ourShader.setMat4("projection", projection);
 
     Cube *cube = new Cube({0.0f, 0.0f, 0.0f}, {0.25f, 0.25f, 0.25f});
     Cube *cube2 = new Cube({1.1f, 0.1f, 0.1f}, {0.25f, 0.25f, 0.25f});
     Cube *cube3 = new Cube({-1.1f, -0.1f, -0.1f}, {0.25f, 0.25f, 0.25f});
     Camera *camera = new Camera({0.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f});
+
+    // The camera must be registered before the callbacks, since both of them
+    // reach it through the window user pointer.
     glfwSetWindowUserPointer(window.getGLFWwindow(), camera);
+    glfwSetFramebufferSizeCallback(window.getGLFWwindow(),
+                                   framebufferSizeCallback);
     glfwSetCursorPosCallback(window.getGLFWwindow(), mouseCallback);
     glfwSetInputMode(window.getGLFWwindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -71,6 +74,7 @@ namespace fivelabsengine
       glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+      ourShader.setMat4("projection", camera->getProjection());
       ourShader.setMat4("view", camera->getView());
 
       cube->update(dt);
@@ -86,5 +90,6 @@ namespace fivelabsengine
     delete cube;
     delete cube2;
     delete cube3;
+    delete camera;
   }
 } // namespace fivelabsengine

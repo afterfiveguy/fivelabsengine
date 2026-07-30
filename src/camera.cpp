@@ -1,12 +1,11 @@
 #include "camera.h"
-
 namespace fivelabsengine
 {
     Camera::Camera(glm::vec3 target, glm::vec3 up) : cameraTarget(target), up(up)
     {
         cameraDirection = glm::normalize(cameraPos - cameraTarget);
         cameraRight = glm::normalize(glm::cross(up, cameraDirection));
-
+        projection = glm::perspective(glm::radians(fov), aspect, 0.1f, 100.0f);
         updateView();
     }
 
@@ -18,6 +17,14 @@ namespace fivelabsengine
     Camera::~Camera()
     {
     }
+
+    void Camera::setAspect(float newAspect)
+    {
+        aspect = newAspect;
+        projection = glm::perspective(glm::radians(fov), aspect, 0.1f, 100.0f);
+    }
+
+    void Camera::resetMouse() { firstMouse = true; }
 
     void Camera::move(CameraMovement direction, float dt)
     {
@@ -31,10 +38,9 @@ namespace fivelabsengine
         if (direction == CameraMovement::Right)
             cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * velocity;
 
-        cameraPos.y = 0.0f;
-
         updateView();
     }
+
     void Camera::onMouseMove(double xposIn, double yposIn)
     {
         float xpos = static_cast<float>(xposIn);

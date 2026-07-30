@@ -4,7 +4,6 @@
 #include <glad/glad.h>   // glad must be included before GLFW
 #include <GLFW/glfw3.h>
 // clang-format on
-#include "app.h"
 #include <iostream>
 
 #include <glm/glm.hpp>
@@ -17,3 +16,9 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+
+namespace fivelabsengine
+{
+    constexpr int WIDTH = 800;
+    constexpr int HEIGHT = 600;
+}

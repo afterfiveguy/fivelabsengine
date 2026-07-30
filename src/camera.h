@@ -18,13 +18,14 @@ namespace fivelabsengine
         ~Camera();
 
         const float cameraSpeed = 0.5f;
+        glm::mat4 getProjection() { return projection; };
+        glm::vec3 getPosition() const { return cameraPos; }
+        glm::mat4 getView() { return view; };
 
         void move(CameraMovement direction, float dt);
-        void look();
-
-        void rotateAroundWorld(float radius);
         void onMouseMove(double xpos, double ypos);
-        glm::mat4 getView() { return view; };
+        void setAspect(float newAspect);
+        void resetMouse();
 
     private:
         void updateView();
@@ -35,6 +36,7 @@ namespace fivelabsengine
         float lastX = 800.0f / 2.0;
         float lastY = 600.0 / 2.0;
         float fov = 45.0f;
+        float aspect{(float)WIDTH / (float)HEIGHT};
         glm::vec3 cameraPos{glm::vec3(0.0f, 0.0f, 3.0f)};
         glm::vec3 cameraFront{glm::vec3(0.0f, 0.0f, -1.0f)};
         glm::vec3 cameraTarget;
@@ -43,6 +45,7 @@ namespace fivelabsengine
         glm::vec3 cameraRight;
         glm::vec3 cameraUp{glm::vec3(0.0f, 1.0f, 0.0f)};
         glm::mat4 view;
+        glm::mat4 projection;
     };
 
 }
